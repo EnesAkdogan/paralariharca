@@ -2,30 +2,34 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Enes'in Parasını Harca</title>
+  <title>Paraları Harca!</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #222;
+      background-color: #1a0000;
       color: #fff;
       text-align: center;
       padding: 50px;
+      font-family: 'Arial', sans-serif;
     }
     #para {
       font-size: 32px;
       margin-bottom: 20px;
     }
     button {
-      padding: 15px 30px;
       font-size: 20px;
-      background-color: red;
+      padding: 10px 30px;
+      background-color: #cc0000;
       color: white;
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #ff0000;
     }
     button:disabled {
-      background-color: grey;
+      background-color: gray;
       cursor: not-allowed;
     }
     #mesaj {
@@ -33,25 +37,67 @@
       font-size: 24px;
       color: yellow;
     }
+    #esya {
+      margin-top: 10px;
+      font-size: 20px;
+      color: #ffcccc;
+    }
   </style>
 </head>
 <body>
 
-<h1>Enes'in Parasını Harca!</h1>
+<h1>Enes Akdoğan'ın Paralarını Harca!</h1>
 <div id="para">Para: 1000 TL</div>
 <button onclick="harca()">Harca -100 TL</button>
+<div id="esya"></div>
 <div id="mesaj"></div>
 
 <script>
   let para = 1000;
+  let paparaPatladi = false;
+  let hacizGeldi = false;
+  
+  const esyalar = [
+    "Lahmacun aldı 🍕",
+    "Telefon aldı 📱",
+    "Bilgisayar aldı 💻",
+    "Araba kiraladı 🚗",
+    "Altın bilezik aldı 💍",
+    "PlayStation aldı 🎮",
+    "Kıyafet aldı 👕",
+    "Hamburger aldı 🍔",
+    "Drone aldı 🚁",
+    "Elektrikli scooter aldı 🛴"
+  ];
 
   function harca() {
-    para -= 100;
-    document.getElementById("para").innerText = "Para: " + para + " TL";
+    if (para > -100 && !paparaPatladi) {
+      para -= 100;
+      document.getElementById("para").innerText = "Para: " + para + " TL";
+      const esya = esyalar[Math.floor(Math.random() * esyalar.length)];
+      document.getElementById("esya").innerText = esya;
 
-    if (para < 0) {
-      document.getElementById("mesaj").innerText = "HACİZ GELDİ! Banka hesabına el konuldu! 😱";
-      document.querySelector("button").disabled = true;
+      if (para === -100) {
+        document.getElementById("mesaj").innerText = "💥 PAPARA PATLADI! Paran içerde kaldı!";
+        setTimeout(() => {
+          para = 1000; // tekrar kasma şansı
+          paparaPatladi = true;
+          document.getElementById("mesaj").innerText = "Yeniden para kazandın! Devam et bakalım...";
+          document.getElementById("para").innerText = "Para: " + para + " TL";
+          document.getElementById("esya").innerText = "";
+        }, 2000);
+      }
+    } else if (paparaPatladi && para >= 0) {
+      para -= 100;
+      document.getElementById("para").innerText = "Para: " + para + " TL";
+      const esya = esyalar[Math.floor(Math.random() * esyalar.length)];
+      document.getElementById("esya").innerText = esya;
+
+      if (para < 0 && !hacizGeldi) {
+        document.getElementById("mesaj").innerText = "🏦 HACİZ GELDİ! Bütün mal varlığın gitti!";
+        document.querySelector("button").disabled = true;
+        hacizGeldi = true;
+      }
     }
   }
 </script>
