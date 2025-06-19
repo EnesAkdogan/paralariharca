@@ -2,104 +2,143 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Paraları Harca!</title>
+  <title>Enes'in Paraları Harca Oyunu</title>
   <style>
     body {
       background-color: #1a0000;
       color: #fff;
       text-align: center;
-      padding: 50px;
       font-family: 'Arial', sans-serif;
+      padding: 20px;
     }
     #para {
-      font-size: 32px;
-      margin-bottom: 20px;
+      font-size: 36px;
+      margin: 20px;
+      padding: 10px;
+      border: 3px dashed red;
+      display: inline-block;
+      border-radius: 10px;
+      background: #330000;
     }
     button {
-      font-size: 20px;
-      padding: 10px 30px;
-      background-color: #cc0000;
-      color: white;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 18px;
       border: none;
-      border-radius: 10px;
+      border-radius: 5px;
+      background-color: red;
+      color: white;
       cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #ff0000;
-    }
-    button:disabled {
-      background-color: gray;
-      cursor: not-allowed;
     }
     #mesaj {
-      margin-top: 30px;
-      font-size: 24px;
+      margin: 20px;
+      font-size: 20px;
       color: yellow;
     }
-    #esya {
-      margin-top: 10px;
-      font-size: 20px;
-      color: #ffcccc;
+    #alınanlar {
+      background: #330000;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    #ccButon {
+      display: none;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      background: orange;
+      color: black;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .kart {
+      display: inline-block;
+      background: #660000;
+      color: white;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<h1>Enes Akdoğan'ın Paralarını Harca!</h1>
-<div id="para">Para: 1000 TL</div>
-<button onclick="harca()">Harca -100 TL</button>
-<div id="esya"></div>
+<h1>Enes'in Paraları Harca!</h1>
+<div id="para">Para: 1000 TL</div><br>
+<button onclick="harca()">Harca</button>
+<button onclick="azalt()">-</button>
+<span id="adet">1</span>
+<button onclick="arttir()">+</button>
+
 <div id="mesaj"></div>
 
+<div id="alınanlar">
+  <h2>Alınan Şeyler:</h2>
+  <ul id="liste"></ul>
+</div>
+
+<div id="ccButon" onclick="ccAc()">CC mi yapsak ya? :D</div>
+<div id="kartlar"></div>
+
 <script>
-  let para = 1000;
-  let paparaPatladi = false;
-  let hacizGeldi = false;
-  
-  const esyalar = [
-    "Lahmacun aldı 🍕",
-    "Telefon aldı 📱",
-    "Bilgisayar aldı 💻",
-    "Araba kiraladı 🚗",
-    "Altın bilezik aldı 💍",
-    "PlayStation aldı 🎮",
-    "Kıyafet aldı 👕",
-    "Hamburger aldı 🍔",
-    "Drone aldı 🚁",
-    "Elektrikli scooter aldı 🛴"
-  ];
+let para = 1000;
+let adet = 1;
+let ilkCC = true;
+const esyalar = ["Lahmacun", "iPhone 32", "RTX 4090", "TOGG 2025", "Altın Kolye", "PS6", "Gucci Tişört", "Big Mac Menü", "Drone", "Scooter", "TV", "Laptop", "Helikopter", "Ayakkabı", "Köpek", "Bisiklet", "Yüzük", "Buzdolabı", "Saat", "Araba"];
 
-  function harca() {
-    if (para > -100 && !paparaPatladi) {
-      para -= 100;
-      document.getElementById("para").innerText = "Para: " + para + " TL";
-      const esya = esyalar[Math.floor(Math.random() * esyalar.length)];
-      document.getElementById("esya").innerText = esya;
+function guncelle() {
+  document.getElementById("para").innerText = "Para: " + para + " TL";
+  if(para < 0) document.getElementById("ccButon").style.display = "block";
+}
 
-      if (para === -100) {
-        document.getElementById("mesaj").innerText = "💥 PAPARA PATLADI! Paran içerde kaldı!";
-        setTimeout(() => {
-          para = 1000; // tekrar kasma şansı
-          paparaPatladi = true;
-          document.getElementById("mesaj").innerText = "Yeniden para kazandın! Devam et bakalım...";
-          document.getElementById("para").innerText = "Para: " + para + " TL";
-          document.getElementById("esya").innerText = "";
-        }, 2000);
-      }
-    } else if (paparaPatladi && para >= 0) {
-      para -= 100;
-      document.getElementById("para").innerText = "Para: " + para + " TL";
-      const esya = esyalar[Math.floor(Math.random() * esyalar.length)];
-      document.getElementById("esya").innerText = esya;
+function arttir() {
+  if(adet < 5) adet++;
+  document.getElementById("adet").innerText = adet;
+}
 
-      if (para < 0 && !hacizGeldi) {
-        document.getElementById("mesaj").innerText = "🏦 HACİZ GELDİ! Bütün mal varlığın gitti!";
-        document.querySelector("button").disabled = true;
-        hacizGeldi = true;
-      }
-    }
+function azalt() {
+  if(adet > 1) adet--;
+  document.getElementById("adet").innerText = adet;
+}
+
+function harca() {
+  for(let i=0;i<adet;i++) {
+    para -= 100;
+    const esya = esyalar[Math.floor(Math.random()*esyalar.length)];
+    const li = document.createElement("li");
+    li.textContent = esya;
+    document.getElementById("liste").appendChild(li);
   }
+  guncelle();
+}
+
+function ccAc() {
+  if(!ilkCC && para < 500){
+    document.getElementById("mesaj").innerText = "CC için 500 TL lazım!";
+    return;
+  }
+  if(!ilkCC) para -= 500;
+  ilkCC = false;
+  document.getElementById("kartlar").innerHTML = "";
+  const kartlar = ["+1000", "+500", "-200", "-500", "Polis!"];
+  kartlar.sort(() => Math.random() - 0.5);
+  kartlar.forEach(kart => {
+    const div = document.createElement("div");
+    div.className = "kart";
+    div.innerText = kart;
+    div.onclick = function(){
+      if(kart.includes("+")) para += parseInt(kart);
+      else if(kart.includes("-")) para += parseInt(kart);
+      else alert("Polis! Yakalandın yarragi yedin :D");
+      guncelle();
+      document.getElementById("kartlar").innerHTML = "";
+      document.getElementById("ccButon").style.display = "none";
+    };
+    document.getElementById("kartlar").appendChild(div);
+  });
+}
 </script>
 
 </body>
