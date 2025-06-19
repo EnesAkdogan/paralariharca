@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Enes'in Parasını Harca</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+    }
+    #para {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 20px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: grey;
+      cursor: not-allowed;
+    }
+    #mesaj {
+      margin-top: 30px;
+      font-size: 24px;
+      color: yellow;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Enes'in Parasını Harca!</h1>
+<div id="para">Para: 1000 TL</div>
+<button onclick="harca()">Harca -100 TL</button>
+<div id="mesaj"></div>
+
+<script>
+  let para = 1000;
+
+  function harca() {
+    para -= 100;
+    document.getElementById("para").innerText = "Para: " + para + " TL";
+
+    if (para < 0) {
+      document.getElementById("mesaj").innerText = "HACİZ GELDİ! Banka hesabına el konuldu! 😱";
+      document.querySelector("button").disabled = true;
+    }
+  }
+</script>
+
+</body>
+</html>
